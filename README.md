@@ -14,7 +14,7 @@ GitHub Actions автоматично запускає Flake8, перевіря�
 Якщо помилки знайдено — у вкладці Actions показується “Failed” і звіт з деталями.
 
 
-Лб2. Варіант 7
+Лб2. Варіант 7 (довго не виходило, бо була не включена віртуалізація)
 Створила на робочому столі папку docker_task7.
 
 У цій папці створила файл data.txt з текстом: "Це мій перший файл у Docker контейнері!".
@@ -84,43 +84,6 @@ cms_net:
 , де запустився інтерфейс WordPress, і http://localhost:8081
 , де відкрився phpMyAdmin. База даних wordpress створена автоматично, і між сервісами забезпечено повну взаємодію.
 
-Завдання 2.
-Було створено папку docker_lab3_task2 і в ній файл docker-compose.yml із трьома сервісами — backend (на Flask), frontend (на Nginx) і redis для кешування. Усі сервіси об’єднані мережею app_net, а для збереження кешу створено том redis_data. Вміст файлу:
-
-version: '3.8'
-services:
-redis:
-image: redis:latest
-volumes:
-- redis_data:/data
-networks:
-- app_net
-backend:
-build: ./backend
-ports:
-- "5000:5000"
-environment:
-REDIS_HOST: redis
-depends_on:
-- redis
-networks:
-- app_net
-frontend:
-image: nginx:alpine
-ports:
-- "8082:80"
-volumes:
-- ./frontend:/usr/share/nginx/html
-networks:
-- app_net
-volumes:
-redis_data:
-networks:
-app_net:
-
-У папці backend створено файл app.py з простим Flask-додатком, який отримує дані з Redis і повертає їх клієнту. Папка frontend містить статичний index.html із запитом до бекенду. Після запуску командою docker-compose up -d усі сервіси запустилися. У браузері за адресою http://localhost:8082
- відкрився фронтенд, який успішно отримував дані з бекенду, а Redis використовувався для кешування.
-
 Завдання 3. 
 Було створено папку docker_lab3_task3 і в ній файл docker-compose.yml із трьома сервісами — api, db і logger. Сервіси об’єднані мережею micro_net, а для бази даних створено том db_storage. Вміст файлу:
 
@@ -160,5 +123,5 @@ db_storage:
 networks:
 micro_net:
 
-У каталозі api створено невеликий Flask-сервер, який зберігає дані у базі PostgreSQL і відправляє лог у сервіс logger через HTTP-запит. У каталозі logger — Python-сервер, який приймає повідомлення і виводить їх у консоль. Після виконання команди docker-compose up -d усі сервіси запустилися, API отримував запити, записував дані у базу, а logger виводив повідомлення про виконані дії.
+У каталозі api створено Flask-сервер, який зберігає дані у базі PostgreSQL і відправляє лог у сервіс logger через HTTP-запит. У каталозі logger — Python-сервер, який приймає повідомлення і виводить їх у консоль. Після виконання команди docker-compose up -d усі сервіси запустилися, API отримував запити, записував дані у базу, а logger виводив повідомлення про виконані дії.
 
